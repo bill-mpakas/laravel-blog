@@ -15,5 +15,5 @@ use App\Http\Controllers\ExampleController;
 */
 
 Route::get('/', [ExampleController::class,"homepage"]);
-Route::get('/about', [ExampleController::class,"about"]);
+Route::get('/about', [ExampleController::class,"aboutPage"]);
 

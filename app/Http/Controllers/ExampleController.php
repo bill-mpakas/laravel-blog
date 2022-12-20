@@ -13,8 +13,8 @@ class ExampleController extends Controller
         return view('homepage',['allAnimals' => $animals,'name' => $ourName]);
     }
 
-    public function about(): string
+    public function aboutPage(): string
     {
-        return 'Halo from about';
+        return view('single-post');
     }
 }
