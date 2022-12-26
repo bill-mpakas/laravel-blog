@@ -19,6 +19,12 @@ class UserController extends Controller
         }
     }
 
+    public function logout()
+    {
+        auth()->logout();
+        return redirect('/')->with('success','You are now logged out');
+    }
+
     public function login(Request $request)
     {
         $incomingFields = $request->validate([
@@ -28,10 +34,9 @@ class UserController extends Controller
 
         if (auth()->attempt(['username' => $incomingFields['loginusername'], 'password' => $incomingFields['loginpassword']])) {
             $request->session()->regenerate();
-            return 'Congrats';
+            return redirect('/')->with('success','You are successfully logged in');
         } else {
-            dd($request);
-            return 'Sorry';
+            return redirect('/')->with('failure','Invalid login');
         }
     }
 
@@ -41,12 +46,14 @@ class UserController extends Controller
         $incoming_fields = $request->validate([
             'username' => ['required', 'min:3','max:20',Rule::unique('users','username')],
             'email' => ['required','email',Rule::unique('users','email')],
-            'password' => ['required','min:8','confirmed'],
+            'password' => ['required','min:4','confirmed'],
         ]);
 
         $incoming_fields['password'] = bcrypt($incoming_fields['password']);
 
-        User::create($incoming_fields);
+        $user = User::create($incoming_fields);
+        auth()->login($user);
+        return redirect('/')->with('success','Thanks for creating an account');
     }
 
 
